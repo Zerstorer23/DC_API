@@ -1,0 +1,16 @@
+D:\VSProjects\DC_API\DC_API\obj\Debug\net5.0\DC_API.csprojAssemblyReference.cache
+D:\VSProjects\DC_API\DC_API\obj\Debug\net5.0\DC_API.GeneratedMSBuildEditorConfig.editorconfig
+D:\VSProjects\DC_API\DC_API\obj\Debug\net5.0\DC_API.AssemblyInfoInputs.cache
+D:\VSProjects\DC_API\DC_API\obj\Debug\net5.0\DC_API.AssemblyInfo.cs
+D:\VSProjects\DC_API\DC_API\obj\Debug\net5.0\DC_API.csproj.CoreCompileInputs.cache
+D:\VSProjects\DC_API\DC_API\obj\Debug\net5.0\DC_API.genruntimeconfig.cache
+D:\VSProjects\DC_API\DC_API\bin\Debug\net5.0\하망중계기.exe
+D:\VSProjects\DC_API\DC_API\bin\Debug\net5.0\하망중계기.deps.json
+D:\VSProjects\DC_API\DC_API\bin\Debug\net5.0\하망중계기.runtimeconfig.json
+D:\VSProjects\DC_API\DC_API\bin\Debug\net5.0\하망중계기.runtimeconfig.dev.json
+D:\VSProjects\DC_API\DC_API\bin\Debug\net5.0\하망중계기.dll
+D:\VSProjects\DC_API\DC_API\bin\Debug\net5.0\ref\하망중계기.dll
+D:\VSProjects\DC_API\DC_API\bin\Debug\net5.0\하망중계기.pdb
+D:\VSProjects\DC_API\DC_API\obj\Debug\net5.0\하망중계기.dll
+D:\VSProjects\DC_API\DC_API\obj\Debug\net5.0\ref\하망중계기.dll
+D:\VSProjects\DC_API\DC_API\obj\Debug\net5.0\하망중계기.pdb
