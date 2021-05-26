@@ -72,20 +72,39 @@ namespace DCAPI
 
         public static void ReadCredentials(string s)
         {
-            System.IO.StreamReader reader =new System.IO.StreamReader(s);
+            try
+            {
+                System.IO.StreamReader reader = new System.IO.StreamReader(s);
 
-            reader.ReadLine();
-            string temp = reader.ReadLine();
-            string yudongStr = temp.Split("=")[1];
+                reader.ReadLine();
+                string temp = reader.ReadLine();
+                string yudongStr = temp.Split("=")[1];
 
-            yudong = Int32.Parse(yudongStr) != 0;
+                yudong = Int32.Parse(yudongStr) != 0;
 
-            temp = reader.ReadLine();
-            id = temp.Split("=")[1];
-            temp = reader.ReadLine();
-            pw = temp.Split("=")[1];
+                temp = reader.ReadLine();
+                id = temp.Split("=")[1];
+                temp = reader.ReadLine();
+                pw = temp.Split("=")[1];
 
-            Console.WriteLine(yudong ? "유동으로 접속 "+id : "고닉으로 접속");
+            }
+            catch (Exception)
+            {
+
+                Console.WriteLine("Settings 파일이 없습니다. 직접 정보를 입력하세요");
+                Console.WriteLine("유동로그인 = 1, 고닉로그인 = 0 입력");
+                string y = Console.ReadLine();
+                yudong = !y.Contains('0');
+                Console.Clear();
+                Console.WriteLine("아이디 입력:");
+                id = Console.ReadLine();
+
+                Console.WriteLine("비밀번호 입력:");
+                pw = Console.ReadLine();
+                Console.Clear();
+            }
+                Console.WriteLine(yudong ? "유동으로 접속 " + id : "고닉으로 접속");
+
         }
     }
 }
