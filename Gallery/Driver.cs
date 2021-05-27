@@ -102,9 +102,9 @@ namespace DCAPI
                 //  long nextDelay = postDelay - (CurrentTimeInMills() - startTime);
                 //   if (nextDelay < 500) nextDelay = 500;
                 //   Console.WriteLine("도배 회피를 위해 " + ((double)nextDelay / 1000d).ToString("0.0") + " 초 대기 ...");
-                postDelay += (long)(rand.NextDouble() * 5000d);
-                Console.WriteLine("도배 회피를 위해 " + ((double)postDelay / 1000d).ToString("0.0") + " 초 대기 ..."); 
-                Thread.Sleep((int)postDelay);
+               long delay = postDelay + (long)(rand.NextDouble() * 5000d);
+                Console.WriteLine("도배 회피를 위해 " + ((double)delay / 1000d).ToString("0.0") + " 초 대기 ..."); 
+                Thread.Sleep((int)delay);
                 startTime = CurrentTimeInMills();
             }
             catch (Exception e)
