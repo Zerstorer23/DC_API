@@ -13,29 +13,34 @@ namespace DCAPI
         private Mutex mutex = new Mutex();
         Thread writeThread;
 
-
+        Random rand;
         string userId;
         string password;
         bool isYudong = false;
         long startTime = 0;
         long tokenTime = 0;
-        long postDelay = 5 * 1000;
+        long postDelay = 10 * 1000;
 
         Queue<string> chatQueue = new Queue<string>();
         DCAPI myAPI;
         IUser myUser;
+        Gallery.Gallery myGallery;
         bool tokenAvailalbe = false;
         public bool stopThread = false;
         public void EnqueueMessage(string msg) //mutex
         {
-            mutex.WaitOne();
+          //  Console.WriteLine("잠금");
+         //   mutex.WaitOne();
             chatQueue.Enqueue(msg);
-            mutex.ReleaseMutex();
+       //     mutex.ReleaseMutex();
+            //Console.WriteLine("열림");
         }
 
         public DCAPI InitDriver()
         {
+            rand = new Random();
             myAPI = new DCAPI();
+            myGallery = new Gallery.Gallery(myAPI.REST, myAPI.Token, "haruhiism");
             return myAPI;
         }
         public void SetCredential(bool yudong, string id, string pw)
@@ -54,7 +59,7 @@ namespace DCAPI
             tokenTime = CurrentTimeInMills();
         }
 
-        public void WritePost(string gallID, string title, string content)
+        public void WritePost(string title, string content)
         {
             if (!tokenAvailalbe) {
                 long elapsedInMills = (CurrentTimeInMills() - tokenTime);
@@ -66,24 +71,26 @@ namespace DCAPI
                 }
                 tokenAvailalbe = true;
             }
-            if (isYudong)
+            Console.WriteLine("작성 : " + title);
+       
+            var writeTask = myGallery.Write(myUser, title, content);
+            if (writeTask.Result.result)
             {
-                var writeTask = REST.Upload.GalleryWrite(myAPI.REST, gallID, myAPI.Token.AppId, "write", myAPI.Token.ClientToken,
-               title, userId, password, null, new string[] { content }, null, null);
-                var res = DCException.GetResult(writeTask.Result);
-               // Console.WriteLine("작성완료: " + res.cause);
+                Console.WriteLine("작성성공 " + title);
             }
-            else
+            else {
+
+                Console.WriteLine("작성실패 " + writeTask.Result.cause);
+            }
+            
+            /*else
             {
                 Console.WriteLine("작성시도 {0} {1}", title, content);
                 var writeTask = REST.Upload.GalleryWrite(myAPI.REST, gallID, myAPI.Token.AppId, "write", myAPI.Token.ClientToken,
                title, null, null, myUser.UserId, new string[] { content }, null, null);
                 var res=  DCException.GetResult(writeTask.Result);
-              //  Console.WriteLine("작성완료: " + res.cause);
-            }
-
-            Console.WriteLine("작성완료: " + title);
-            DoSleep();
+                Console.WriteLine("작성완료: " + res.cause);
+            }*/
         }
         public long CurrentTimeInMills() {
             return DateTime.Now.Ticks / 10000;
@@ -92,10 +99,12 @@ namespace DCAPI
         {
             try
             {
-                long nextDelay = postDelay - (CurrentTimeInMills() - startTime);
-                if (nextDelay < 500) nextDelay = 500;
-                Console.WriteLine("도배 회피를 위해 " + (nextDelay / 1000) + " 초 대기 ...");
-                Thread.Sleep((int)nextDelay);
+                //  long nextDelay = postDelay - (CurrentTimeInMills() - startTime);
+                //   if (nextDelay < 500) nextDelay = 500;
+                //   Console.WriteLine("도배 회피를 위해 " + ((double)nextDelay / 1000d).ToString("0.0") + " 초 대기 ...");
+                postDelay += (long)(rand.NextDouble() * 5000d);
+                Console.WriteLine("도배 회피를 위해 " + ((double)postDelay / 1000d).ToString("0.0") + " 초 대기 ..."); 
+                Thread.Sleep((int)postDelay);
                 startTime = CurrentTimeInMills();
             }
             catch (Exception e)
@@ -121,18 +130,21 @@ namespace DCAPI
             {
                 while (!stopThread)
                 {
-                    mutex.WaitOne();
                     if (chatQueue.Count > 0)
                     {
+                    //    Console.WriteLine("잠금");
+                     //   mutex.WaitOne();
                         string msg = MergeMessages();
+                      //  mutex.ReleaseMutex();
+                     //   Console.WriteLine("열림");
                         string title = msg;
                         if (title.Length > 30)
                         {
                             title = title.Substring(0, 30);
                         }
-                        WritePost("haruhiism", title, msg);
+                        WritePost(title, msg);
+                        DoSleep();
                     }
-                    mutex.ReleaseMutex();
 
                 }
             }
