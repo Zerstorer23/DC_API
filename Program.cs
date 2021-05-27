@@ -8,6 +8,7 @@ namespace DCAPI
         static TCPServer tcpServer;
         static string id, pw;
         static bool yudong = true;
+
         static void Main(string[] args)
         {
             ReadCredentials("setting.txt");
@@ -60,13 +61,13 @@ namespace DCAPI
             Console.WriteLine("대기 10");
             Thread.Sleep(10 * 1000);
 
-            for (int i = 0; i < 5; i++)
+          /*  for (int i = 0; i < 5; i++)
             {
 
                 var Task3 = REST.Upload.GalleryWrite(api.REST, "haruhiism", api.Token.AppId, "write", api.Token.ClientToken,
                     "스즈미야하루히안녕하세요" + i, null, null, ((IUser)member).UserId, new string[] { "안녕하세요" + i }, null, null);
                 var result = Task3.Result;
-            }
+            }*/
 
         }
 
