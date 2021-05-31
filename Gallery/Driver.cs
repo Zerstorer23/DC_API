@@ -19,7 +19,7 @@ namespace DCAPI
         bool isYudong = false;
         long startTime = 0;
         long tokenTime = 0;
-        long postDelay = 10 * 1000;
+        long postDelay = 25 * 1000;
 
         Queue<string> chatQueue = new Queue<string>();
         DCAPI myAPI;
