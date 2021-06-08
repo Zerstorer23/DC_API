@@ -30,10 +30,10 @@ namespace DCAPI
         public void EnqueueMessage(string msg) //mutex
         {
           //  Console.WriteLine("잠금");
-         //   mutex.WaitOne();
+            mutex.WaitOne();
             chatQueue.Enqueue(msg);
-       //     mutex.ReleaseMutex();
-            //Console.WriteLine("열림");
+            Console.WriteLine("받음 " + msg+" 대기중인 메세지 :"+chatQueue.Count);
+            mutex.ReleaseMutex();
         }
 
         public DCAPI InitDriver()
@@ -71,7 +71,7 @@ namespace DCAPI
                 }
                 tokenAvailalbe = true;
             }
-            Console.WriteLine("작성 : " + title);
+            Console.WriteLine("     작성중 : " + title);
        
             var writeTask = myGallery.Write(myUser, title, content);
             if (writeTask.Result.result)
@@ -82,15 +82,6 @@ namespace DCAPI
 
                 Console.WriteLine("작성실패 " + writeTask.Result.cause);
             }
-            
-            /*else
-            {
-                Console.WriteLine("작성시도 {0} {1}", title, content);
-                var writeTask = REST.Upload.GalleryWrite(myAPI.REST, gallID, myAPI.Token.AppId, "write", myAPI.Token.ClientToken,
-               title, null, null, myUser.UserId, new string[] { content }, null, null);
-                var res=  DCException.GetResult(writeTask.Result);
-                Console.WriteLine("작성완료: " + res.cause);
-            }*/
         }
         public long CurrentTimeInMills() {
             return DateTime.Now.Ticks / 10000;
@@ -99,12 +90,10 @@ namespace DCAPI
         {
             try
             {
-                //  long nextDelay = postDelay - (CurrentTimeInMills() - startTime);
-                //   if (nextDelay < 500) nextDelay = 500;
-                //   Console.WriteLine("도배 회피를 위해 " + ((double)nextDelay / 1000d).ToString("0.0") + " 초 대기 ...");
                long delay = postDelay + (long)(rand.NextDouble() * 5000d);
                 Console.WriteLine("도배 회피를 위해 " + ((double)delay / 1000d).ToString("0.0") + " 초 대기 ..."); 
                 Thread.Sleep((int)delay);
+                Console.WriteLine("대기 끝");
                 startTime = CurrentTimeInMills();
             }
             catch (Exception e)
@@ -130,20 +119,22 @@ namespace DCAPI
             {
                 while (!stopThread)
                 {
+                    Console.WriteLine("남은 메세지 " + chatQueue.Count + " 개");
+                    mutex.WaitOne();
                     if (chatQueue.Count > 0)
                     {
-                    //    Console.WriteLine("잠금");
-                     //   mutex.WaitOne();
                         string msg = MergeMessages();
-                      //  mutex.ReleaseMutex();
-                     //   Console.WriteLine("열림");
                         string title = msg;
                         if (title.Length > 30)
                         {
                             title = title.Substring(0, 30);
                         }
+                        mutex.ReleaseMutex();
                         WritePost(title, msg);
                         DoSleep();
+                    }
+                    else {
+                        Thread.Sleep((int)3000);
                     }
 
                 }
@@ -161,8 +152,12 @@ namespace DCAPI
             while (chatQueue.Count > 0)
             {
                 string nextMessage = chatQueue.Peek();
-                if ((message.Length) < 10) //10자 이하는 모두 합성
+                int newLength = message.Length + nextMessage.Length + 1;
+                if (newLength >= 30)
                 {
+                    break;
+                }
+                else {
                     message.Append(' ').Append(nextMessage);
                     chatQueue.Dequeue();
                 }

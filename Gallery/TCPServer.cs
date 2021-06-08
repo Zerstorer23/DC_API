@@ -58,7 +58,6 @@ namespace DCAPI
                 }
                 if (tokens[0] != NET_SIG) continue;
                 str = tokens[1];
-                Console.WriteLine("받음 " + str);
                 driver.EnqueueMessage(str);
             }
          //   Console.WriteLine("연결해제 " + receivedBytes);
