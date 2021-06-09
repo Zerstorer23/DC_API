@@ -76,11 +76,11 @@ namespace DCAPI
             var writeTask = myGallery.Write(myUser, title, content);
             if (writeTask.Result.result)
             {
-                Console.WriteLine("작성성공 " + title);
+                Console.WriteLine("     작성성공 " + title);
             }
             else {
 
-                Console.WriteLine("작성실패 " + writeTask.Result.cause);
+                Console.WriteLine("     작성실패 " + writeTask.Result.cause);
             }
         }
         public long CurrentTimeInMills() {
@@ -133,11 +133,14 @@ namespace DCAPI
                         WritePost(title, msg);
                         DoSleep();
                     }
-                    else {
+                    else
+                    {
+                        mutex.ReleaseMutex();
                         Thread.Sleep((int)3000);
                     }
 
                 }
+                Console.WriteLine("작성쓰레드 정지");
             }
             catch (Exception e)
             {
