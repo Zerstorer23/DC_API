@@ -19,7 +19,8 @@ namespace DCAPI
         bool isYudong = false;
         long startTime = 0;
         long tokenTime = 0;
-        long postDelay = 25 * 1000;
+        public static int base_post_delay = 30;
+        public long postDelay;
 
         Queue<string> chatQueue = new Queue<string>();
         DCAPI myAPI;
@@ -41,6 +42,8 @@ namespace DCAPI
             rand = new Random();
             myAPI = new DCAPI();
             myGallery = new Gallery.Gallery(myAPI.REST, myAPI.Token, "haruhiism");
+            postDelay = (base_post_delay - 5) * 1000;
+            Console.WriteLine("도배방지 시간: " + base_post_delay+"초");
             return myAPI;
         }
         public void SetCredential(bool yudong, string id, string pw)

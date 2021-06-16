@@ -87,6 +87,10 @@ namespace DCAPI
                 id = temp.Split("=")[1];
                 temp = reader.ReadLine();
                 pw = temp.Split("=")[1];
+                temp = reader.ReadLine();
+                if (temp != null) {
+                    Driver.base_post_delay = Int32.Parse(temp.Split("=")[1]);
+                }
 
             }
             catch (Exception)
