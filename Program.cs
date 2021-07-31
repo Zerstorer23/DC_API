@@ -81,7 +81,7 @@ namespace DCAPI
                 string temp = reader.ReadLine();
                 string yudongStr = temp.Split("=")[1];
 
-                yudong = Int32.Parse(yudongStr) != 0;
+                yudong = !yudongStr.Contains('0');
 
                 temp = reader.ReadLine();
                 id = temp.Split("=")[1];
